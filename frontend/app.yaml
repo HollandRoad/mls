@@ -1,0 +1,19 @@
+runtime: nodejs18
+
+handlers:
+- url: /(.*\.(json|ico|js|css|png|jpg|jpeg|gif|woff|woff2|ttf|svg))$
+  static_files: .next/static/\1
+  upload: .next/static/.*\.(json|ico|js|css|png|jpg|jpeg|gif|woff|woff2|ttf|svg)$
+
+- url: /.*
+  script: auto
+
+env_variables:
+  NEXT_PUBLIC_API_URL: "https://YOUR_BACKEND_URL.appspot.com"
+
+instance_class: F1
+
+automatic_scaling:
+  target_cpu_utilization: 0.65
+  min_instances: 1
+  max_instances: 10 

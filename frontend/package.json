@@ -1,0 +1,121 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "main": "main.js",
+  "author": "Nicolas Moulonguet",
+  "description": "MLS Application",
+  "dependencies": {
+    "@cubejs-client/core": "^0.34.44",
+    "@cubejs-client/react": "^0.34.44",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^6.1.5",
+    "@mui/material": "^6.1.5",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@tinymce/tinymce-react": "^4.3.0",
+    "axios": "^1.7.7",
+    "chart.js": "^4.4.7",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.3.1",
+    "react-draggable": "^4.4.6",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^6.27.0",
+    "react-scripts": "5.0.1",
+    "wait-on": "^7.2.0",
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "start": "cross-env BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron-dev": "cross-env NODE_ENV=development npx concurrently \"npm start\" \"npx wait-on http://localhost:3000 && electron .\"",
+    "electron-prod": "cross-env NODE_ENV=production npm run build && electron .",
+    "pack": "electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "make:mac": "rm -rf dist && npm run build && npx electron-builder --mac",
+    "make:mac-zip": "rm -rf dist && npx electron-builder --mac zip",
+    "make:mac-dmg": "rm -rf dist && npx electron-builder --mac dmg",
+    "make:mac-all": "rm -rf dist && npx electron-builder --mac dmg zip"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "rimraf": "5.0.5"
+  },
+  "build": {
+    "appId": "com.mls.app",
+    "productName": "MLS",
+    "mac": {
+      "category": "public.app-category.business",
+      "icon": "assets/icon.icns",
+      "target": [
+        "dmg"
+      ]
+    },
+    "files": [
+      "build/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "extraResources": [
+      {
+        "from": "../backend",
+        "to": "backend",
+        "filter": [
+          "**/*",
+          "!**/__pycache__/*",
+          "!**/*.pyc",
+          "!**/.git/*",
+          "!**/.env",
+          "!**/*.sqlite3"
+        ]
+      }
+    ],
+    "extends": null,
+    "afterPack": "./scripts/prepare-python.js"
+  },
+  "resolutions": {
+    "string-width-cjs": "5.1.1",
+    "strip-ansi-cjs": "8.0.0",
+    "wrap-ansi-cjs": "8.0.0"
+  }
+}

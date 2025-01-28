@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .header {
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 24px;
+            color: #1976d2;
+            margin-bottom: 20px;
+        }
+        .info-section {
+            margin-bottom: 30px;
+        }
+        .chart-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .expenses-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .expenses-table th, .expenses-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .expenses-table th {
+            background-color: #f5f5f5;
+        }
+        .total {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .description {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">Dépenses Propriétaire - {{ year }}</h1>
+    </div>
+
+    <div class="info-section">
+        <h2>Informations de l'appartement</h2>
+        <p><strong>Adresse:</strong> {{ flat.address }}</p>
+        <p><strong>Ville:</strong> {{ flat.postal_code }} {{ flat.city }}</p>
+        <p><strong>Loyer:</strong> {{ flat.rent_amount }}€</p>
+    </div>
+
+    <div class="info-section">
+        <h2>Résumé des dépenses</h2>
+        {% for type, amount in totals_by_type.items %}
+        <p><strong>{{ type }}:</strong> {{ amount|floatformat:2 }}€</p>
+        {% endfor %}
+        <p class="total">Total: {{ total_amount|floatformat:2 }}€</p>
+    </div>
+
+    <div class="expenses-section">
+        <h2>Détail des dépenses</h2>
+        <table class="expenses-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>
+                        {{ expense.get_expense_type_display }}
+                        {% if expense.description %}
+                        <div class="description">({{ expense.description }})</div>
+                        {% endif %}
+                    </td>
+                    <td>{{ expense.payment_date|date:"d/m/Y" }}</td>
+                    <td>{{ expense.amount|floatformat:2 }}€</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html> 

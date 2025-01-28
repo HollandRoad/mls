@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .expense-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .expense-table th, .expense-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .expense-table th { background-color: #f5f5f5; }
+        .total-row { font-weight: bold; }
+        .expense-type-header {
+            background-color: #eee;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Bordereau des Dépenses</h2>
+        <p>Année: {{ year }}</p>
+        <p>Adresse: {{ flat.address }}</p>
+    </div>
+
+    {% regroup expenses by get_expense_type_display as expense_list %}
+    
+    <table class="expense-table">
+        <thead>
+            <tr>
+                <th>Type de dépense</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Montant</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense_type in expense_list %}
+                <tr class="expense-type-header">
+                    <td colspan="4">{{ expense_type.grouper }}</td>
+                </tr>
+                {% for expense in expense_type.list %}
+                    <tr>
+                        <td></td>
+                        <td>{{ expense.payment_date|date:"d/m/Y" }}</td>
+                        <td>{{ expense.description|default:"-" }}</td>
+                        <td>{{ expense.amount }} €</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3" style="text-align: right;">Sous-total {{ expense_type.grouper }}:</td>
+                    <td>{{ expense_type.list|sum_amounts }} €</td>
+                </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="3" style="text-align: right;">Total:</td>
+                <td>{{ total_amount }} €</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html> 
